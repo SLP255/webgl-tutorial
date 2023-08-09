@@ -1,6 +1,7 @@
 import { mat4 } from "gl-matrix";
+import { Buffers } from "./init-buffers";
 
-function drawScene(gl: WebGLRenderingContext, programInfo: ProgramInfo, buffers: WebGLBuffer | null) {
+function drawScene(gl: WebGLRenderingContext, programInfo: ProgramInfo, buffers: Buffers) {
   gl.clearColor(0.0, 0.0, 0.0, 1.0); // 黒でクリア、完全に不透明
   gl.clearDepth(1.0); // 全てをクリア
   gl.enable(gl.DEPTH_TEST); // 深度テストを有効化
@@ -39,6 +40,7 @@ function drawScene(gl: WebGLRenderingContext, programInfo: ProgramInfo, buffers:
   // WebGL にどのように座標バッファーから vertexPosition 属性に
   // 座標を引き出すか伝える
   setPositionAttribute(gl, buffers, programInfo);
+  setColorAttribute(gl, buffers, programInfo);
 
   // WebGLに、描写するのに我々のプログラムを用いるように伝える
   gl.useProgram(programInfo.program);
@@ -60,6 +62,12 @@ function drawScene(gl: WebGLRenderingContext, programInfo: ProgramInfo, buffers:
     const vertexCount = 4;
     gl.drawArrays(gl.TRIANGLE_STRIP, offset, vertexCount);
   }
+}
+
+const setColorAttribute = (gl: WebGLRenderingContext, buffers: any, programInfo: any): void => {
+  const vertexColorAttribute = gl.getAttribLocation(programInfo.program, "aVertexColor")
+  gl.bindBuffer(gl.ARRAY_BUFFER, buffers.color);
+  gl.vertexAttribPointer(vertexColorAttribute, 4, gl.FLOAT, false, 0, 0);
 }
 
 // WebGL に、位置バッファーから vertexPosition 属性に

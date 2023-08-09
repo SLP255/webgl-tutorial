@@ -39,6 +39,9 @@ const initShaderProgram = (gl: WebGLRenderingContext): WebGLProgram | null => {
     return null
   }
 
+  const vertexColorAttribute = gl.getAttribLocation(shaderProgram, 'aVertexColor');
+  gl.enableVertexAttribArray(vertexColorAttribute);
+
   return shaderProgram
 }
 

@@ -1,9 +1,31 @@
-function initBuffers(gl: WebGLRenderingContext) {
+export interface Buffers {
+  position: WebGLBuffer | null
+  color: WebGLBuffer | null
+}
+
+function initBuffers(gl: WebGLRenderingContext): Buffers {
   const positionBuffer = initPositionBuffer(gl);
+  const colorBuffer = initColorBuffer(gl)
 
   return {
     position: positionBuffer,
+    color: colorBuffer
   };
+}
+
+const initColorBuffer = (gl: WebGLRenderingContext) => {
+  const colors = [
+    1.0,  1.0,  1.0,  1.0,    // 白
+    1.0,  0.0,  0.0,  1.0,    // 赤
+    0.0,  1.0,  0.0,  1.0,    // 緑
+    0.0,  0.0,  1.0,  1.0     // 青
+  ]
+
+  const squareVerticesColorBuffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, squareVerticesColorBuffer);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW)
+
+  return squareVerticesColorBuffer
 }
 
 function initPositionBuffer(gl: WebGLRenderingContext) {
