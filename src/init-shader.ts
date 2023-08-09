@@ -1,6 +1,3 @@
-import { initBuffers } from "./init-buffers"
-import { drawScene } from "./draw-scene"
-
 // 頂点シェーダーのプログラム
 const vsSource = `
   attribute vec4 aVertexPosition;
@@ -17,20 +14,11 @@ const fsSource = `
   }
 `
 
-const renderProcess = () => {
-  const gl = init()
-  if (!gl) {
-    console.error("[error] gl init failed")
-    return
-  }
-
+const getProgramInfo = (gl: WebGLRenderingContext): ProgramInfo | null => {
   const shaderProgram = initShaderProgram(gl)
-  if (!shaderProgram) {
-    console.error("[error] shaderProgram init failed")
-    return
-  }
+  if (!shaderProgram) return null
 
-  const programInfo = {
+  return {
     program: shaderProgram,
     attribLocations: {
       vertexPosition: gl.getAttribLocation(shaderProgram, "aVertexPosition"),
@@ -38,34 +26,8 @@ const renderProcess = () => {
     uniformLocations: {
       projectionMatrix: gl.getUniformLocation(shaderProgram, "uProjectionMatrix"),
       modelViewMatrix: gl.getUniformLocation(shaderProgram, "uModelViewMatrix"),
-    },
-  };
-
-  // ここでは、これから描画するすべてのオブジェクトを
-  // 構築するルーチンを呼び出しています。
-  const buffers = initBuffers(gl);
-
-  // シーンを描画
-  drawScene(gl, programInfo, buffers);
-}
-
-const loadShader = (gl: WebGLRenderingContext, type: number, source: string): WebGLShader | null => {
-  const shader = gl.createShader(type)
-  if (!shader) return null
-
-  gl.shaderSource(shader, source)
-  gl.compileShader(shader)
-
-
-  if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-    alert(
-      `シェーダーのコンパイル時にエラーが発生しました: ${gl.getShaderInfoLog(shader)}`
-    );
-    gl.deleteShader(shader)
-    return null
+    }
   }
-
-  return shader
 }
 
 const initShaderProgram = (gl: WebGLRenderingContext): WebGLProgram | null => {
@@ -93,14 +55,22 @@ const initShaderProgram = (gl: WebGLRenderingContext): WebGLProgram | null => {
   return shaderProgram
 }
 
-const init = (): WebGLRenderingContext | null => {
-  const canvas = document.querySelector<HTMLCanvasElement>("#view")
-  const gl = canvas?.getContext("webgl")
-  if (!gl) return null
+const loadShader = (gl: WebGLRenderingContext, type: number, source: string): WebGLShader | null => {
+  const shader = gl.createShader(type)
+  if (!shader) return null
 
-  gl.clearColor(0, 0, 0, 1)
-  gl.clear(gl.COLOR_BUFFER_BIT)
-  return gl
+  gl.shaderSource(shader, source)
+  gl.compileShader(shader)
+
+  if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+    alert(
+      `シェーダーのコンパイル時にエラーが発生しました: ${gl.getShaderInfoLog(shader)}`
+    );
+    gl.deleteShader(shader)
+    return null
+  }
+
+  return shader
 }
 
-export { renderProcess }
+export { getProgramInfo }

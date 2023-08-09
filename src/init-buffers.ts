@@ -1,4 +1,4 @@
-function initBuffers(gl) {
+function initBuffers(gl: WebGLRenderingContext) {
   const positionBuffer = initPositionBuffer(gl);
 
   return {
@@ -6,7 +6,7 @@ function initBuffers(gl) {
   };
 }
 
-function initPositionBuffer(gl) {
+function initPositionBuffer(gl: WebGLRenderingContext) {
   // 正方形の位置を保存するためのバッファーを作成する
   const positionBuffer = gl.createBuffer();
 

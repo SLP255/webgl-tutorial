@@ -1,4 +1,4 @@
-import { renderProcess } from './webgl-sample'
+import { renderProcess } from './render'
 
 const main = () => {
   document.querySelector<HTMLDivElement>("#app")!.innerHTML = `

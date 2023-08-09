@@ -1,6 +1,6 @@
 import { mat4 } from "gl-matrix";
 
-function drawScene(gl: WebGLRenderingContext, programInfo: any, buffers: any) {
+function drawScene(gl: WebGLRenderingContext, programInfo: ProgramInfo, buffers: WebGLBuffer | null) {
   gl.clearColor(0.0, 0.0, 0.0, 1.0); // 黒でクリア、完全に不透明
   gl.clearDepth(1.0); // 全てをクリア
   gl.enable(gl.DEPTH_TEST); // 深度テストを有効化
