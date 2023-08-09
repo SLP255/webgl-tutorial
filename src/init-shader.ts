@@ -1,18 +1,5 @@
-// 頂点シェーダーのプログラム
-const vsSource = `
-  attribute vec4 aVertexPosition;
-  uniform mat4 uModelViewMatrix;
-  uniform mat4 uProjectionMatrix;
-  void main() {
-    gl_Position = uProjectionMatrix * uModelViewMatrix * aVertexPosition;
-  }
-`
-
-const fsSource = `
-  void main() {
-    gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
-  }
-`
+import vsSource from './shader.vert?raw'
+import fsSource from './shader.frag?raw'
 
 const getProgramInfo = (gl: WebGLRenderingContext): ProgramInfo | null => {
   const shaderProgram = initShaderProgram(gl)
